@@ -4,7 +4,7 @@ erDiagram
     PLAYER ||--o{ BATTING_PERFORMANCE : records
     PLAYER ||--o{ BOWLING_PERFORMANCE : records
     PLAYER ||--o{ OPPONENT : faces
-    PLAYER ||--o{ DISMISSAL : bowls_or_fields
+    PLAYER o|--o{ DISMISSAL : bowls_or_fields
 
     TEAM ||--o{ MATCH : team1
     TEAM ||--o{ MATCH : team2
@@ -23,6 +23,15 @@ erDiagram
     INNINGS ||--o{ BOWLING_PERFORMANCE : contains
 
     BATTING_PERFORMANCE o|--o{ DISMISSAL : has
+
+    USERS {
+        int user_id PK
+        varchar name
+        varchar email UK
+        varchar password_hash
+        enum role
+        timestamp created_at
+    }
 
     PLAYER {
         int player_id PK
