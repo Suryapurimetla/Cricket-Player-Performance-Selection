@@ -168,6 +168,14 @@ export default function Home() {
           >
             📈 Advanced SQL Reports
           </a>
+
+                    <a
+            href="/scouting-reports"
+            className="block rounded-xl px-4 py-3 text-slate-300 hover:bg-white/5"
+          >
+            📝 Scouting Reports
+          </a>
+          
         </nav>
 
         <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-4">

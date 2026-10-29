@@ -161,13 +161,42 @@ npx tsx scripts/mongodb-aggregation-demo.ts
 
 This script summarizes scouting reports by recommendation.
 
-## 10. Documentation
+## 10. Documentation and Screenshots
 
 The `docs/` directory contains the database design, data dictionary, database technology justification, and ER diagram documentation.
 
-The `sql/` directory contains SQL operation examples. The `scripts/` directory contains database testing and demonstration scripts.
+The `sql/` directory contains SQL operation examples, including advanced database demonstrations. The `scripts/` directory contains database testing and demonstration scripts.
 
-Testing evidence and application screenshots can be added to the project documentation as they are collected.
+### Application and Database Screenshots
+
+Screenshots documenting the application's functionality and database implementation are available in [`docs/screenshots/`](docs/screenshots/).
+
+| Screenshot | Description |
+|---|---|
+| `01-main-dashboard.png` | Main dashboard and analytics overview |
+| `02-players-page.png` | Player listing |
+| `03-player-selection.png` | Player selection interface |
+| `04-top-batters-report.png` | Top batters report |
+| `05-advanced-sql-reports.png` | Advanced SQL reports |
+| `06-scouting-reports.png` | Scouting reports listing |
+| `07-create-scouting-report.png` | Creating a scouting report |
+| `08a-edit-report.png` | Editing a scouting report |
+| `08b-search-filter.png` | Searching and filtering reports |
+| `09-mysql-tables.png` | MySQL database tables |
+| `10_ER_DIAGRAM.png` | Entity-relationship diagram |
+| `11-stored-procedure.png` | Stored procedure demonstration |
+| `12a-sql-views.png` | SQL views demonstration |
+| `12b-trigger-validation.png` | Trigger and validation demonstration |
+| `13-mongodb-aggregation.png` | MongoDB aggregation results |
+| `14a-login-page.png` | Login interface |
+| `14b-role-access-tests.png` | Unauthenticated API access test |
+| `14c-analyst-access-denied.png` | Analyst authorization test |
+| `14d-admin-access-success.png` | Admin authorization test |
+| `15a-build-success.png` | Production build verification |
+| `15b-github-repository.png` | GitHub repository |
+| `16-mongodb-scouting-reports.png` | MongoDB scouting report documents |
+
+
 
 ## 11. Conclusion
 
