@@ -4,7 +4,10 @@ erDiagram
     PLAYER ||--o{ BATTING_PERFORMANCE : records
     PLAYER ||--o{ BOWLING_PERFORMANCE : records
     PLAYER ||--o{ OPPONENT : faces
-    PLAYER o|--o{ DISMISSAL : bowls_or_fields
+
+    PLAYER o|--o{ DISMISSAL : bowler
+    PLAYER o|--o{ DISMISSAL : fielder
+    BATTING_PERFORMANCE o|--o{ DISMISSAL : associated_with
 
     TEAM ||--o{ MATCH : team1
     TEAM ||--o{ MATCH : team2
@@ -21,8 +24,6 @@ erDiagram
 
     INNINGS ||--o{ BATTING_PERFORMANCE : contains
     INNINGS ||--o{ BOWLING_PERFORMANCE : contains
-
-    BATTING_PERFORMANCE o|--o{ DISMISSAL : has
 
     USERS {
         int user_id PK
@@ -132,4 +133,3 @@ erDiagram
         int team_id FK
         int match_id FK
     }
-
