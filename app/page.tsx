@@ -156,7 +156,7 @@ export default function Home() {
           </a>
 
           <a
-            href="#analytics"
+            href="#analytics-report"
             className="block rounded-xl px-4 py-3 text-slate-300 hover:bg-white/5"
           >
             ▥ Analytics
@@ -430,7 +430,10 @@ export default function Home() {
         <PlayerSelection />
 
         {/* Top Batters Report */}
-        <section className="mt-8 rounded-2xl border border-white/10 bg-[#101d2e] p-5 md:p-6">
+        <section
+  id="analytics-report"
+  className="mt-8 scroll-mt-6 rounded-2xl border border-white/10 bg-[#101d2e] p-5 md:p-6"
+>
           <div className="mb-6">
             <p className="text-sm text-emerald-300">SQL ANALYTICS</p>
 

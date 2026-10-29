@@ -1,9 +1,11 @@
 
-import { NextResponse } from "next/server";
+import { connection, NextResponse } from "next/server";
 import pool from "../../../lib/db";
 import { getSession } from "../../../lib/auth";
 
 export async function GET() {
+  await connection();
+
   try {
     // Verify the logged-in user's session.
     const session = await getSession();
