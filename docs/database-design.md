@@ -1,41 +1,42 @@
-# Cricket Player Performance & Selection Intelligence System
+# Database Design and Data Dictionary
 
-## 1. Database Design
+## 1. Overview
 
-### 1.1 Project Overview
+The Cricket Player Performance & Selection Intelligence System uses MySQL as its primary relational database and MongoDB as its NoSQL database. The system stores cricket match information, player details, batting and bowling statistics, dismissals, opponents, venues, weather information, and user accounts.
 
-The Cricket Player Performance & Selection Intelligence System manages cricket-related data, including players, teams, matches, venues, weather conditions, innings, player roles, batting performance, bowling performance, dismissals, and opponent records.
+The application is developed using Next.js and TypeScript, with API routes connecting the application to the databases. Authentication and role-based access control are used to protect restricted operations.
 
-The system uses MySQL for structured relational data and MongoDB for scouting reports. A web application built with Next.js provides the interface for accessing and managing the data.
+## 2. Database Architecture
 
-### 1.2 Database Technologies
+The system uses two database paradigms:
 
-- **MySQL:** Stores structured cricket data using relational tables, primary keys, foreign keys, constraints, indexes, views, and stored procedures.
-- **MongoDB:** Stores scouting reports as flexible documents and supports Create, Read, Update, and Delete (CRUD) operations.
-- **Next.js:** Provides the web application interface and API routes for database interaction.
-- **TypeScript:** Supports type-safe application development.
-- **JWT authentication:** Supports authenticated sessions and role-based access checks in the application.
+- **MySQL:** Stores structured cricket data and enforces relational integrity through primary keys, foreign keys, unique constraints, CHECK constraints, indexes, views, a stored procedure, and a trigger.
+- **MongoDB:** Stores flexible scouting reports in the `scouting_reports` collection, allowing analysts to maintain player observations and selection-related notes.
 
-### 1.3 Database Tables
+### MySQL Database
 
-The MySQL database contains the following 12 tables:
+Database name: `cricket_selection`
 
-1. **`player`** — Stores player names, countries, batting styles, bowling styles, and dates of birth.
-2. **`team`** — Stores cricket team information.
-3. **`match`** — Stores match details, participating teams, venue, weather reference, format, date, and winner.
-4. **`venue`** — Stores venue names, cities, countries, altitude, and pitch type.
-5. **`weather`** — Stores weather conditions and measurements.
-6. **`innings`** — Stores innings details, batting and bowling teams, runs, wickets, and overs.
-7. **`player_role`** — Stores player-role information for cricket formats.
-8. **`batting_performance`** — Stores player batting statistics for innings.
-9. **`bowling_performance`** — Stores player bowling statistics for innings.
-10. **`dismissal`** — Stores dismissal information and references to the batter's performance, bowler, and fielder.
-11. **`opponent`** — Associates players, teams, and matches.
-12. **`users`** — Stores application users, email addresses, password hashes, roles, and account creation timestamps.
+The database contains 12 tables and 2 views.
 
-### 1.4 Primary Keys
+| No. | Table | Purpose |
+|---|---|---|
+| 1 | `player` | Stores player names, countries, batting styles, bowling styles, and dates of birth. |
+| 2 | `team` | Stores cricket team information. |
+| 3 | `match` | Stores match details, teams, venue, weather reference, winner, and format. |
+| 4 | `venue` | Stores cricket ground details and geographical information, including altitude where available. |
+| 5 | `weather` | Stores weather conditions and measurements associated with matches. |
+| 6 | `innings` | Stores innings-level information, including batting team, bowling team, runs, and wickets. |
+| 7 | `player_role` | Stores player role information for different cricket formats. |
+| 8 | `batting_performance` | Stores individual batting statistics for a player in an innings. |
+| 9 | `bowling_performance` | Stores individual bowling statistics for a player in an innings. |
+| 10 | `dismissal` | Stores dismissal types and optional references to batting performance, bowler, and fielder. |
+| 11 | `opponent` | Associates players with opposing teams and matches. |
+| 12 | `users` | Stores application user accounts, email addresses, and roles. |
 
-Each table has a primary key to uniquely identify its records.
+## 3. Primary Keys
+
+Each table has a primary key that uniquely identifies its records.
 
 | Table | Primary Key |
 |---|---|
@@ -52,130 +53,253 @@ Each table has a primary key to uniquely identify its records.
 | `opponent` | `opponent_id` |
 | `users` | `user_id` |
 
-### 1.5 Foreign-Key Relationships
+The primary keys uniquely identify records and support relationships between tables.
 
-Foreign keys maintain referential integrity between related tables.
+## 4. Foreign Keys and Relationships
 
-The database defines the following 19 foreign-key relationships:
+The database uses foreign keys to maintain referential integrity between related tables.
 
-1. `match.team1_id` → `team.team_id`
-2. `match.team2_id` → `team.team_id`
-3. `match.venue_id` → `venue.venue_id`
-4. `match.weather_id` → `weather.weather_id`
-5. `match.winner_team_id` → `team.team_id`
-6. `innings.match_id` → `match.match_id`
-7. `innings.batting_team_id` → `team.team_id`
-8. `innings.bowling_team_id` → `team.team_id`
-9. `player_role.player_id` → `player.player_id`
-10. `batting_performance.innings_id` → `innings.innings_id`
-11. `batting_performance.player_id` → `player.player_id`
-12. `bowling_performance.innings_id` → `innings.innings_id`
-13. `bowling_performance.player_id` → `player.player_id`
-14. `dismissal.batting_perf_id` → `batting_performance.batting_perf_id`
-15. `dismissal.bowler_id` → `player.player_id`
-16. `dismissal.fielder_id` → `player.player_id`
-17. `opponent.player_id` → `player.player_id`
-18. `opponent.team_id` → `team.team_id`
-19. `opponent.match_id` → `match.match_id`
+| Child Table | Foreign Key | Referenced Table | Referenced Column |
+|---|---|---|---|
+| `match` | `team1_id` | `team` | `team_id` |
+| `match` | `team2_id` | `team` | `team_id` |
+| `match` | `venue_id` | `venue` | `venue_id` |
+| `match` | `weather_id` | `weather` | `weather_id` |
+| `match` | `winner_team_id` | `team` | `team_id` |
+| `innings` | `match_id` | `match` | `match_id` |
+| `innings` | `batting_team_id` | `team` | `team_id` |
+| `innings` | `bowling_team_id` | `team` | `team_id` |
+| `player_role` | `player_id` | `player` | `player_id` |
+| `batting_performance` | `innings_id` | `innings` | `innings_id` |
+| `batting_performance` | `player_id` | `player` | `player_id` |
+| `bowling_performance` | `innings_id` | `innings` | `innings_id` |
+| `bowling_performance` | `player_id` | `player` | `player_id` |
+| `dismissal` | `batting_perf_id` | `batting_performance` | `batting_perf_id` |
+| `dismissal` | `bowler_id` | `player` | `player_id` |
+| `dismissal` | `fielder_id` | `player` | `player_id` |
+| `opponent` | `player_id` | `player` | `player_id` |
+| `opponent` | `team_id` | `team` | `team_id` |
+| `opponent` | `match_id` | `match` | `match_id` |
 
-These relationships connect match, team, player, innings, and performance records while helping prevent references to nonexistent parent records.
+**Total foreign keys: 19.**
 
-### 1.6 Unique Constraints
+The `match.weather_id` and `match.winner_team_id` fields are nullable. The three foreign-key fields in `dismissal` are also nullable, allowing dismissal records to be stored when one or more of those references are unavailable.
 
-The database includes the following unique constraints:
+The `dismissal.batting_perf_id` foreign key does not have a unique constraint. Therefore, the schema does not enforce a one-to-one relationship between batting performance and dismissal records.
 
-- `team.team_name` must be unique.
-- `users.email` must be unique.
-- `player_role` has a composite unique constraint on `(player_id, format)`.
-- `opponent` has a composite unique constraint on `(player_id, team_id, match_id)`.
+## 5. Unique Constraints
 
-These constraints prevent duplicate team names, duplicate user email addresses, and duplicate combinations of the specified fields.
+Unique constraints prevent duplicate values or duplicate combinations where required.
 
-### 1.7 Important Check Constraints
+| Table | Unique Column(s) | Purpose |
+|---|---|---|
+| `team` | `team_name` | Prevents duplicate team names. |
+| `users` | `email` | Prevents multiple user accounts from sharing the same email address. |
+| `player_role` | `(player_id, format)` | Prevents duplicate role records for the same player and format combination. |
+| `opponent` | `(player_id, team_id, match_id)` | Prevents duplicate player-team-match associations. |
 
-The database includes check constraints to validate data before accepting records.
+## 6. Check Constraints and Column Restrictions
 
-Important examples include:
+CHECK constraints enforce domain and range restrictions on stored values.
 
-- Player names must contain at least two characters.
-- A match cannot have the same team as both participating teams.
-- Match format must be `ODI` or `T20I`.
-- Innings numbers must be at least 1.
-- Batting and bowling teams must differ.
-- Innings runs must be non-negative.
-- Innings wickets must remain within the configured range of 0 to 11.
-- Batting runs, balls faced, fours, and sixes must be non-negative.
-- Batting position must be at least 1 when provided.
-- Bowling statistics must satisfy their configured non-negative and range restrictions.
-- Dismissal types must belong to the configured list of valid dismissal types.
-- Venue altitude cannot be negative.
-- The `users` table restricts roles to `admin` and `analyst`, with `analyst` as the default role.
+### Player
 
-These constraints help maintain data consistency at the database level.
+- `player_name` must contain at least two characters, as enforced by `CHAR_LENGTH(player_name) >= 2`.
 
-### 1.8 Indexing
+### Match
 
-Indexes improve the efficiency of searches, joins, and frequently executed queries.
+- `team1_id` and `team2_id` must be different.
+- `match_format` must be either `ODI` or `T20I`.
 
-The database uses primary-key indexes, unique indexes, and indexes supporting foreign-key relationships. Additional indexes documented for the project include:
+### Innings
 
-- `idx_match_venue_format` — supports queries involving match venue and format.
-- `idx_batting_player_innings` — supports batting-performance lookups by player and innings.
-- `idx_bowling_player_innings` — supports bowling-performance lookups by player and innings.
-- `idx_opponent_player_team` — supports queries involving opponents, players, and teams.
+- `innings_number` must be greater than or equal to 1.
+- `batting_team_id` and `bowling_team_id` must be different.
+- `total_runs` must be greater than or equal to 0.
+- `total_wickets` must be between 0 and 11, inclusive.
 
-The composite indexes on batting and bowling performance use `(player_id, innings_id)`.
+### Batting Performance
 
-### 1.9 Views
+- `runs_scored` must be greater than or equal to 0.
+- `balls_faced` must be greater than or equal to 0.
+- `fours` must be greater than or equal to 0.
+- `sixes` must be greater than or equal to 0.
+- `batting_position` must be greater than or equal to 1 when a value is supplied.
+- `phase`, when supplied, must be `Powerplay`, `Middle`, or `Death`.
 
-The MySQL database contains two views.
+### Bowling Performance
 
-#### 1. `vw_batting_performance`
+- `overs_bowled` must be greater than or equal to 0.
+- `runs_conceded` must be greater than or equal to 0.
+- `wickets_taken` must be between 0 and 10, inclusive.
+- `phase`, when supplied, must be `Powerplay`, `Middle`, or `Death`.
 
-This view joins the `batting_performance` table with the `player` and `innings` tables. It combines batting statistics with player details and innings information.
+### Dismissal
 
-The view includes information such as player ID, player name, country, innings ID, match ID, runs scored, balls faced, fours, sixes, strike rate, batting position, and phase.
+The `dismissal_type` column is restricted to the following values:
 
-It simplifies the retrieval and analysis of batting performance.
+- `caught`
+- `bowled`
+- `lbw`
+- `run out`
+- `stumped`
+- `caught and bowled`
+- `retired hurt`
+- `hit wicket`
+- `retired out`
+- `obstructing the field`
+- `retired not out`
+- `timed out`
+- `hit the ball twice`
 
-#### 2. `vw_player_details`
+### Venue
 
-This view retrieves player information from the `player` table, including:
+- `altitude_m` must be greater than or equal to 0 when a value is supplied.
 
-- Player ID
-- Player name
-- Country
-- Batting style
-- Bowling style
-- Date of birth
+### User Role Restriction
 
-It provides a convenient way to retrieve player details without repeatedly specifying the underlying column list.
+The `users.role` column uses the MySQL ENUM type with the allowed values `admin` and `analyst`. Its default value is `analyst`. This is a column-level ENUM restriction, not a separate CHECK constraint.
 
-### 1.10 ER Diagram
+**Note:** SQL CHECK constraints generally permit expressions that evaluate to `UNKNOWN` because of `NULL` values. Where a column is nullable, a CHECK constraint alone does not necessarily require the column to contain a value.
 
-The Entity–Relationship (ER) diagram represents the database entities, their attributes, primary keys, foreign keys, and relationships.
+## 7. Defaults and Nullable Columns
 
-The ER diagram illustrates how the player, team, match, venue, weather, innings, performance, dismissal, opponent, user, and player-role entities are related.
+Default values reduce the need to supply values explicitly during insertion.
 
-The project's ER diagram image is stored as `ER_DIAGRAM1.png` in the project root directory.
+Examples confirmed in the schema include:
 
-### 1.11 Data Integrity
+- `batting_performance.runs_scored` defaults to `0`.
+- `batting_performance.balls_faced` defaults to `0`.
+- `batting_performance.fours` defaults to `0`.
+- `batting_performance.sixes` defaults to `0`.
+- `bowling_performance.overs_bowled` defaults to `0.0`.
+- `bowling_performance.runs_conceded` defaults to `0`.
+- `bowling_performance.wickets_taken` defaults to `0`.
+- `users.role` defaults to `analyst`.
+- `users.created_at` defaults to the current timestamp.
 
-Read-only validation queries were executed against the existing MySQL data to check selected consistency rules.
+Some fields are nullable to accommodate information that may not be available for every record. Examples include `player.bowling_style`, `player.date_of_birth`, `match.weather_id`, `match.winner_team_id`, and the optional foreign-key references in `dismissal`.
 
-The checks confirmed that:
+## 8. Indexing Strategy
 
-- No match winner in the checked data was outside the two participating teams.
-- No innings in the checked data used batting or bowling teams outside the corresponding match.
+Indexes improve lookup and join performance for commonly queried columns.
 
-These results support the consistency of the existing data for the two tested rules. They do not establish that every possible data-integrity rule has been verified.
+The following composite indexes are present in the MySQL schema:
 
-### 1.12 Summary
+| Index | Table | Indexed Columns | Purpose |
+|---|---|---|---|
+| `idx_batting_player_innings` | `batting_performance` | `(player_id, innings_id)` | Supports queries involving batting records by player and innings. |
+| `idx_bowling_player_innings` | `bowling_performance` | `(player_id, innings_id)` | Supports queries involving bowling records by player and innings. |
+| `idx_match_venue_format` | `match` | `(venue_id, match_format)` | Supports match searches by venue and format. |
+| `idx_opponent_player_team` | `opponent` | `(player_id, team_id)` | Supports player-team association lookups. |
 
-The relational database is organized around 12 MySQL tables connected through primary keys and foreign keys. Unique constraints and check constraints help prevent invalid or duplicate records, while indexes support efficient data retrieval.
+The database also has primary-key indexes, indexes associated with foreign keys where required, and unique indexes for the configured unique constraints.
 
-The database also includes two views, a stored procedure for retrieving player batting statistics, and a trigger for validating batting statistics during insertion.
+## 9. Views
 
-MongoDB complements MySQL by storing scouting reports as flexible documents. The Next.js application integrates both databases through API routes and provides authentication and role-based access checks.
+The database contains two views that simplify access to commonly used information.
 
-Together, these components support cricket-data management, performance analysis, and player selection workflows.
+### `vw_batting_performance`
+
+Provides a reusable view of batting performance information for querying and analysis.
+
+### `vw_player_details`
+
+Provides a reusable view of player details for application queries and reporting.
+
+Views help simplify queries by presenting selected information through a predefined database object. They do not replace the underlying tables.
+
+## 10. Stored Procedure
+
+### `GetPlayerBattingStats`
+
+The database contains the stored procedure `GetPlayerBattingStats`.
+
+It provides a reusable database operation for retrieving player batting statistics. Using a stored procedure centralizes the relevant query logic in MySQL and allows the operation to be invoked without rewriting the query each time.
+
+## 11. Trigger
+
+### `trg_validate_batting_performance`
+
+The database contains a `BEFORE INSERT` trigger on the `batting_performance` table.
+
+The trigger checks the following values before a new batting performance record is inserted:
+
+- `runs_scored`
+- `balls_faced`
+- `fours`
+- `sixes`
+
+If any of these values is negative, the trigger raises SQLSTATE `45000` with the message:
+
+`Batting statistics cannot be negative`
+
+The trigger is defined for INSERT operations only. It does not perform the same validation for UPDATE operations.
+
+The CHECK constraints provide additional database-level restrictions for the configured batting statistics.
+
+## 12. MongoDB Database Design
+
+### Database
+
+`cricket_selection_nosql`
+
+### Collection
+
+`scouting_reports`
+
+The `scouting_reports` collection stores scouting information in a flexible document structure. This is suitable for analyst observations and player assessments whose fields may vary between reports.
+
+Unlike the structured MySQL tables, MongoDB documents can accommodate different combinations of scouting attributes without requiring every report to have an identical set of columns.
+
+The application uses MySQL for relational cricket records and MongoDB for scouting reports, demonstrating the use of two database paradigms within the project.
+
+## 13. Application Integration
+
+The database layer is integrated with a Next.js and TypeScript application.
+
+The application provides API routes for accessing cricket data and scouting functionality. The APIs use the relational database for structured records and MongoDB for scouting documents.
+
+Authentication and role-based authorization distinguish administrative operations from analyst operations. Restricted endpoints check authentication and authorization before allowing access.
+
+Input validation and database constraints provide complementary protections: application validation helps return useful API errors, while database constraints protect the integrity of stored relational data.
+
+## 14. Entity-Relationship Diagram
+
+The ER diagram is documented in `docs/ER_Diagram.md`, with the rendered image stored in the project root as `ER_DIAGRAM1.png`.
+
+The diagram represents the 12 MySQL entities and their relationships, including:
+
+- Players and teams
+- Matches, venues, and weather records
+- Innings and participating teams
+- Player roles
+- Batting and bowling performances
+- Dismissal records and their optional player/performance references
+- Opponent associations
+- User accounts
+
+The diagram complements the relational schema by showing the entities, primary keys, foreign keys, and relationships between them.
+
+## 15. Data Integrity and Validation
+
+The database design applies several forms of integrity control:
+
+1. **Entity integrity:** Primary keys uniquely identify records.
+2. **Referential integrity:** Foreign keys connect related records and prevent invalid references under the configured constraints.
+3. **Uniqueness:** Unique constraints prevent duplicate values and combinations where specified.
+4. **Domain and range validation:** CHECK constraints restrict values to configured ranges and allowed categories.
+5. **Insertion validation:** The batting performance trigger rejects negative batting statistics during INSERT operations.
+6. **Application-level validation:** API routes validate incoming data and enforce authorization requirements before database operations.
+
+These mechanisms work together to maintain consistent relational data while allowing flexible scouting documents in MongoDB.
+
+## 16. Summary
+
+The Cricket Player Performance & Selection Intelligence System uses a hybrid database architecture with MySQL and MongoDB.
+
+The MySQL database contains 12 tables, 2 views, 19 foreign keys, configured unique constraints, CHECK constraints, four composite indexes, the `GetPlayerBattingStats` stored procedure, and the `trg_validate_batting_performance` trigger.
+
+MongoDB stores scouting reports in the `scouting_reports` collection. The Next.js and TypeScript application integrates both databases through API routes, authentication, authorization, and input validation.
+
+This design supports structured cricket performance analysis, relational data integrity, and flexible scouting information for player assessment and selection.
