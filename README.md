@@ -11,7 +11,7 @@ The project combines a relational database with a NoSQL database to manage crick
 - Store and manage cricket players, teams, matches, innings, and performance statistics.
 - Analyze batting and bowling performance using SQL queries.
 - Rank players using performance-based analytics.
-- Maintain scouting reports with strengths, weaknesses, and selection recommendations.
+- Maintain scouting reports containing strengths, weaknesses, observations, and selection recommendations.
 - Implement authentication and role-based access control.
 - Demonstrate relational and NoSQL database concepts in a working web application.
 
@@ -32,33 +32,43 @@ The project combines a relational database with a NoSQL database to manage crick
 
 ### MySQL — Relational Database
 
-MySQL stores structured cricket data and user information.
+Database name: `cricket_selection`
 
-The database includes tables for:
+MySQL stores structured cricket data and user information. The database contains 12 tables:
 
-- Players and teams
-- Matches and venues
-- Innings
-- Batting and bowling performance
-- Dismissals
-- Player roles
-- Opponents
-- Weather
-- Users
+- `player`
+- `team`
+- `match`
+- `venue`
+- `weather`
+- `innings`
+- `player_role`
+- `batting_performance`
+- `bowling_performance`
+- `dismissal`
+- `opponent`
+- `users`
 
-The relational schema uses primary keys, foreign keys, unique constraints, check constraints, indexes, and database-level validation.
+The relational schema uses primary keys, foreign keys, unique constraints, CHECK constraints, and indexes to support data integrity and efficient queries.
 
-The project also includes SQL views, a stored procedure, a validation trigger, analytical queries, and player-ranking reports.
+The database also contains:
+
+- Two views: `vw_batting_performance` and `vw_player_details`
+- Stored procedure: `GetPlayerBattingStats`
+- Trigger: `trg_validate_batting_performance`
+- Composite indexes for common player, innings, venue, format, and opponent queries
 
 ### MongoDB — NoSQL Database
 
-MongoDB stores scouting reports in the `scouting_reports` collection.
+Database name: `cricket_selection_nosql`
 
-Each report can contain the player ID, player name, strengths, weaknesses, selection recommendation, observations, creator, and timestamps.
+Collection: `scouting_reports`
 
-The application supports creating, viewing, editing, deleting, and filtering scouting reports. Player information is validated against MySQL before scouting reports are created or updated.
+MongoDB stores scouting reports in a flexible document structure. Reports can contain player information, strengths, weaknesses, selection recommendations, observations, creator information, and timestamps, depending on the document structure.
 
-A MongoDB aggregation pipeline groups scouting reports by recommendation and counts the reports in each group.
+The application supports scouting report management and includes a MongoDB aggregation demonstration that groups reports by recommendation.
+
+Player information is validated against MySQL before scouting reports are created or updated.
 
 ## 5. Key Features
 
@@ -76,38 +86,40 @@ A MongoDB aggregation pipeline groups scouting reports by recommendation and cou
 
 The project demonstrates the following database concepts:
 
-1. **SQL views** — reusable queries for player details and batting performance.
-2. **Stored procedures** — `GetPlayerBattingStats` retrieves aggregated batting statistics for a player.
-3. **Triggers** — validates batting statistics before insertion.
-4. **Indexes** — supports efficient lookups and joins.
-5. **Common Table Expressions (CTEs)** — organizes analytical queries.
-6. **Window functions** — ranks players using the `RANK()` function.
-7. **Aggregate functions and subqueries** — supports performance summaries and player analysis.
-8. **MongoDB aggregation** — summarizes scouting reports by recommendation.
+1. **SQL views:** Reusable queries for player details and batting performance.
+2. **Stored procedures:** `GetPlayerBattingStats` provides player batting statistics.
+3. **Triggers:** Validates batting statistics before insertion.
+4. **Indexes:** Supports efficient lookups and joins.
+5. **Common Table Expressions (CTEs):** Organizes analytical queries.
+6. **Window functions:** Uses functions such as `RANK()` for player ranking.
+7. **Aggregate functions and subqueries:** Supports performance summaries and player analysis.
+8. **MongoDB aggregation:** Summarizes scouting reports by recommendation.
 
 ## 7. Authentication and Data Integrity
 
 The application supports two roles:
 
-- **Admin:** can access administrative user-management operations.
-- **Analyst:** can use permitted application features but cannot access admin-only operations.
+- **Admin:** Can access administrative user-management operations.
+- **Analyst:** Can access permitted application features but cannot access admin-only operations.
 
-Passwords are hashed using bcrypt, sessions are protected using JWT, and protected API routes check authentication and authorization.
+Passwords are hashed using bcrypt, sessions use JWT, and protected API routes check authentication and authorization.
 
-Database-level constraints and foreign keys help prevent invalid or inconsistent cricket performance records.
+Database constraints and foreign keys help prevent invalid or inconsistent relational records. Application-level validation provides additional checks before data is stored.
 
 ## 8. Project Structure
+
+The project includes the following key directories and files:
 
 ```text
 cricket-selection-app/
 ├── app/
-│   ├── api/
-│   └── ...
+│   └── api/
 ├── docs/
 │   ├── database-design.md
 │   ├── data-dictionary.md
 │   ├── database-technology.md
-│   └── ER_Diagram.md
+│   ├── ER_Diagram.md
+│   └── screenshots/
 ├── lib/
 ├── scripts/
 │   ├── create-users.ts
@@ -120,6 +132,8 @@ cricket-selection-app/
 └── README.md
 ```
 
+This is a high-level project structure. Some directories contain additional files and subdirectories.
+
 ## 9. Setup and Execution
 
 ### Prerequisites
@@ -131,15 +145,17 @@ cricket-selection-app/
 
 ### Installation
 
-Clone the repository and navigate to the project directory.
+Clone the repository and navigate to the project directory:
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/Suryapurimetla/Cricket-Player-Performance-Selection.git
 cd cricket-selection-app
 npm install
 ```
 
-Configure `.env.local` with the required database connection settings and authentication secret. Use your own local credentials and never commit secrets to GitHub.
+Configure `.env.local` with the database connection settings and authentication secret required by the application.
+
+Use your own local credentials and never commit secrets to GitHub.
 
 Ensure MySQL is running and the `cricket_selection` database is configured. Ensure MongoDB is running and accessible through the configured connection string.
 
@@ -149,27 +165,37 @@ Start the development server:
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open the application at:
+
+http://localhost:3000
+
+### Production Build
+
+To check the production build, run:
+
+```bash
+npm run build
+```
 
 ### MongoDB Aggregation Demo
 
-Run the read-only aggregation demonstration from the project root:
+Run the aggregation demonstration from the project root:
 
 ```bash
 npx tsx scripts/mongodb-aggregation-demo.ts
 ```
 
-This script summarizes scouting reports by recommendation.
+This script summarizes scouting reports by recommendation. Ensure the MongoDB connection is configured before running it.
 
 ## 10. Documentation and Screenshots
 
-The `docs/` directory contains the database design, data dictionary, database technology justification, and ER diagram documentation.
+The `docs/` directory contains the database design, data dictionary, database technology justification, ER diagram documentation, and screenshots.
 
 The `sql/` directory contains SQL operation examples, including advanced database demonstrations. The `scripts/` directory contains database testing and demonstration scripts.
 
 ### Application and Database Screenshots
 
-Screenshots documenting the application's functionality and database implementation are available in [`docs/screenshots/`](docs/screenshots/).
+Screenshots documenting the application's functionality and database implementation are available in `docs/screenshots/`.
 
 | Screenshot | Description |
 |---|---|
@@ -196,13 +222,15 @@ Screenshots documenting the application's functionality and database implementat
 | `15b-github-repository.png` | GitHub repository |
 | `16-mongodb-scouting-reports.png` | MongoDB scouting report documents |
 
-
-
 ## 11. Conclusion
 
-The Cricket Player Performance & Selection Intelligence System demonstrates the integration of relational and NoSQL databases in a cricket analytics application. It combines structured performance data, SQL-based analytics, scouting reports, authentication, and database integrity mechanisms to support informed player evaluation and selection.
+The Cricket Player Performance & Selection Intelligence System demonstrates the integration of relational and NoSQL databases in a cricket analytics application.
+
+It combines structured cricket performance data, SQL-based analytics, scouting reports, authentication, and database integrity mechanisms to support player evaluation and selection.
 
 ## 12. Future Enhancements
+
+Potential future enhancements include:
 
 - More advanced player-selection metrics
 - Additional performance visualizations
