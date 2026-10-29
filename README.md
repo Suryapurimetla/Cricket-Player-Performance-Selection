@@ -15,6 +15,17 @@ The project combines a relational database with a NoSQL database to manage crick
 - Implement authentication and role-based access control.
 - Demonstrate relational and NoSQL database concepts in a working web application.
 
+## Team Members and Contributions
+
+This project was developed collaboratively by two team members.
+
+| Team Member | Responsibilities |
+|---|---|
+| **Jaya Surya** | Designed the MySQL relational database, developed the ER diagram and relational schema, implemented SQL queries and advanced database concepts, and worked on database constraints, stored procedures, triggers, and views. Contributed to application integration, testing, and documentation. |
+| **Sreyaesh Peruri** | Contributed to MongoDB database design and scouting report management, implemented MongoDB operations and aggregation, and worked on the Next.js application interface, API integration, authentication, and role-based access control. Contributed to testing, screenshots, and documentation. |
+
+Both team members contributed to the development and testing of the Cricket Player Performance & Selection Intelligence System, integrating MySQL and MongoDB into a single web application.
+
 ## 3. Technology Stack
 
 | Technology | Purpose |
