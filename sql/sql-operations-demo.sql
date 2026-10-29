@@ -46,3 +46,35 @@ WHERE player_id IN (
     HAVING SUM(runs_scored) > 5000
 )
 ORDER BY player_name;
+
+-- Additional analytical queries using actual cricket tables
+
+-- 8. JOIN: Display player batting performances with innings details
+SELECT
+    p.player_name,
+    i.match_id,
+    i.innings_number,
+    bp.runs_scored,
+    bp.balls_faced
+FROM player AS p
+JOIN batting_performance AS bp
+    ON p.player_id = bp.player_id
+JOIN innings AS i
+    ON bp.innings_id = i.innings_id
+ORDER BY bp.runs_scored DESC
+LIMIT 10;
+
+-- 9. Aggregate: Summarize runs by player
+SELECT
+    p.player_id,
+    p.player_name,
+    COUNT(*) AS innings_recorded,
+    SUM(bp.runs_scored) AS total_runs,
+    AVG(bp.runs_scored) AS average_runs,
+    MAX(bp.runs_scored) AS highest_recorded_score
+FROM player AS p
+JOIN batting_performance AS bp
+    ON p.player_id = bp.player_id
+GROUP BY p.player_id, p.player_name
+HAVING SUM(bp.runs_scored) > 5000
+ORDER BY total_runs DESC;

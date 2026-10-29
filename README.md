@@ -15,6 +15,19 @@ The project combines a relational database with a NoSQL database to manage crick
 - Implement authentication and role-based access control.
 - Demonstrate relational and NoSQL database concepts in a working web application.
 
+## Functional Requirements
+
+The system provides the following functionality:
+
+- Display cricket players and their performance information.
+- Allow users to explore player statistics and selection-related reports.
+- Generate batting performance reports using relational database queries.
+- Create, view, edit, search, and delete scouting reports stored in MongoDB.
+- Provide authentication and role-based access for administrators and analysts.
+- Allow authorized administrators to manage application users.
+- Validate input and enforce database constraints to maintain data integrity.
+- Retrieve and analyze scouting reports using MongoDB aggregation.
+
 ## Team Members and Contributions
 
 This project was developed collaboratively by two team members.
@@ -80,6 +93,18 @@ MongoDB stores scouting reports in a flexible document structure. Reports can co
 The application supports scouting report management and includes a MongoDB aggregation demonstration that groups reports by recommendation.
 
 Player information is validated against MySQL before scouting reports are created or updated.
+
+## System Architecture
+
+The application follows a layered architecture:
+
+1. **Presentation layer:** Next.js pages provide the dashboard, player views, reports, login, and scouting interfaces.
+2. **API layer:** Next.js API routes handle requests, validation, authentication, and authorization.
+3. **Relational data layer:** MySQL stores structured cricket data, including players, teams, matches, innings, and performance records.
+4. **Document data layer:** MongoDB stores flexible scouting report documents and supports aggregation queries.
+5. **Configuration layer:** Environment variables provide database connection settings without hard-coding credentials into application source files.
+
+The application uses MySQL for relational queries and integrity constraints, while MongoDB supports flexible scouting information. Both databases are accessed through the application backend.
 
 ## 5. Key Features
 
@@ -232,6 +257,23 @@ Screenshots documenting the application's functionality and database implementat
 | `15a-build-success.png` | Production build verification |
 | `15b-github-repository.png` | GitHub repository |
 | `16-mongodb-scouting-reports.png` | MongoDB scouting report documents |
+
+## Testing Results
+
+The project was tested through database-level checks, application testing, and production build verification.
+
+| Test Area | Test Performed | Result |
+|---|---|---|
+| Production Build | Ran `npm.cmd run build` | Passed |
+| TypeScript | Type checking during the production build | Passed |
+| Page Generation | Generated 15 static pages | Passed |
+| Database Constraints | Tested rejection of an invalid player foreign key | Passed |
+| Trigger Validation | Tested rejection of negative batting statistics | Passed |
+| Stored Procedure | Executed `GetPlayerBattingStats` for a player | Passed |
+| Authentication and Authorization | Tested administrator and analyst access permissions | Passed |
+| MongoDB | Tested scouting report operations and aggregation | Passed |
+
+These tests provide evidence that the application builds successfully, database integrity rules are enforced, and the main database and access-control features work as intended.
 
 ## 11. Conclusion
 
